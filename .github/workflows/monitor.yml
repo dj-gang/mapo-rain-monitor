@@ -33,3 +33,48 @@ jobs:
             git commit -m "Update Mapo rainfall forecast report"
             git push
           fi
+      - name: Send report to Telegram
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          if [ -z "$TELEGRAM_BOT_TOKEN" ] || [ -z "$TELEGRAM_CHAT_ID" ]; then
+            echo "::warning::Telegram is not configured. Add TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID in repository Actions secrets."
+            exit 0
+          fi
+          python - <<'PY'
+          import json, os, urllib.request
+          from pathlib import Path
+          token = os.environ["TELEGRAM_BOT_TOKEN"]
+          chat_id = os.environ["TELEGRAM_CHAT_ID"]
+          report = json.loads(Path("reports/latest.json").read_text(encoding="utf-8"))
+          text = Path("reports/latest.md").read_text(encoding="utf-8")
+          # Telegram sendMessage accepts up to 4096 characters; split on line boundaries.
+          chunks, chunk = [], ""
+          for line in text.splitlines():
+              candidate = (chunk + "\\n" + line).strip() if chunk else line
+              if len(candidate) > 3800:
+                  chunks.append(chunk)
+                  chunk = line
+              else:
+                  chunk = candidate
+          if chunk:
+              chunks.append(chunk)
+          if report.get("threshold_events"):
+              events = report["threshold_events"]
+              labels = []
+              for e in events:
+                  when = e.get("time", e.get("date", "시각 확인 불가"))
+                  kind = "시간당" if e.get("type") == "hourly" else "일 누적"
+                  labels.append(f'{e["model"]} {when} {kind} {e.get("mm")}mm')
+              alert = "🚨 마포구 강수 임계치 충족\\n" + "\\n".join(labels)
+              chunks.insert(0, alert)
+          for message in chunks:
+              body = json.dumps({"chat_id": chat_id, "text": message, "disable_web_page_preview": True}).encode()
+              req = urllib.request.Request(f"https://api.telegram.org/bot{token}/sendMessage", data=body, headers={"Content-Type":"application/json"}, method="POST")
+              with urllib.request.urlopen(req, timeout=20) as response:
+                  result = json.loads(response.read().decode())
+                  if not result.get("ok"):
+                      raise RuntimeError("Telegram API returned ok=false")
+          print(f"Telegram delivery succeeded: {len(chunks)} message(s)")
+          PY
