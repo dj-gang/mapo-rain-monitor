@@ -52,7 +52,7 @@ def fetch(model):
             payload["_retrieved_at_kst"] = datetime.now(ZoneInfo(TZ)).isoformat(timespec="seconds")
             payload["_requested_model"] = model
             return payload, None
-        except (HTTPError, URLError, TimeoutError, json.JSONDecodeError, OSError) as exc:
+        except (HTTPError, URLError, TimeoutError, json.JSONDecodeError, OSError, ValueError) as exc:
             last = f"{type(exc).__name__}: {exc}"
             if attempt < 2:
                 time.sleep(2 ** attempt)
