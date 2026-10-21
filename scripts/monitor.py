@@ -180,5 +180,5 @@ lines += ["", "## 해석 주의", "",
           "- 이 저장소는 예보표를 기록하며, 별도 알림 채널을 설정하지 않으면 휴대전화 푸시/문자 알림을 보내지 않습니다."]
 (OUT / "latest.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
 print(f"Status: {status}; successful={len(results)}; failed={len(failures)}")
-if not results:
-    sys.exit(1)
+# Keep exit status successful after writing a "판정 불가" report so the workflow
+# can still save and notify the user about API outages.
