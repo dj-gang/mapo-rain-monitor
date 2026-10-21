@@ -1,5 +1,5 @@
 {
-  "generated_at_kst": "2026-10-21T10:41:16+09:00",
+  "generated_at_kst": "2026-10-21T20:15:29+09:00",
   "location": {
     "name": "서울 마포구",
     "latitude": 37.55,
@@ -14,74 +14,70 @@
     "ecmwf_ifs025",
     "ncep_gfs_global",
     "icon_global",
-    "kma_gdps",
     "gem_global"
   ],
-  "failed_models": {},
+  "failed_models": {
+    "kma_gdps": "URLError: <urlopen error _ssl.c:993: The handshake operation timed out>"
+  },
   "models": {
     "ecmwf_ifs025": {
       "analysis": {
         "daily": [
           {
             "date": "2026-10-21",
-            "precipitation_mm": 0.1,
-            "precipitation_probability_max_pct": 45,
-            "temperature_min_c": 7.9,
-            "temperature_max_c": 15.7
+            "precipitation_mm": 0.8,
+            "precipitation_probability_max_pct": 92,
+            "temperature_min_c": 7.7,
+            "temperature_max_c": 15.9
           },
           {
             "date": "2026-10-22",
-            "precipitation_mm": 0.0,
+            "precipitation_mm": 0.1,
             "precipitation_probability_max_pct": 0,
             "temperature_min_c": 5.5,
-            "temperature_max_c": 13.2
+            "temperature_max_c": 13.3
           },
           {
             "date": "2026-10-23",
-            "precipitation_mm": 0.1,
-            "precipitation_probability_max_pct": 1,
+            "precipitation_mm": -0.1,
+            "precipitation_probability_max_pct": 2,
             "temperature_min_c": 7.2,
-            "temperature_max_c": 18.9
+            "temperature_max_c": 20.3
           },
           {
             "date": "2026-10-24",
             "precipitation_mm": 0.0,
-            "precipitation_probability_max_pct": 18,
-            "temperature_min_c": 12.8,
-            "temperature_max_c": 18.2
+            "precipitation_probability_max_pct": 16,
+            "temperature_min_c": 12.5,
+            "temperature_max_c": 18.6
           },
           {
             "date": "2026-10-25",
-            "precipitation_mm": 3.1,
-            "precipitation_probability_max_pct": 60,
-            "temperature_min_c": 13.6,
-            "temperature_max_c": 19.8
+            "precipitation_mm": 0.2,
+            "precipitation_probability_max_pct": 49,
+            "temperature_min_c": 11.9,
+            "temperature_max_c": 23.8
           },
           {
             "date": "2026-10-26",
-            "precipitation_mm": 26.9,
-            "precipitation_probability_max_pct": 57,
-            "temperature_min_c": 13.9,
-            "temperature_max_c": 18.9
+            "precipitation_mm": 1.2,
+            "precipitation_probability_max_pct": 61,
+            "temperature_min_c": 15.6,
+            "temperature_max_c": 22.0
           },
           {
             "date": "2026-10-27",
             "precipitation_mm": 0.0,
-            "precipitation_probability_max_pct": 14,
-            "temperature_min_c": 5.8,
-            "temperature_max_c": 15.7
+            "precipitation_probability_max_pct": 9,
+            "temperature_min_c": 4.3,
+            "temperature_max_c": 16.9
           }
         ],
         "hourly_peaks_ge_20mm": [],
-        "daily_peaks_ge_20mm": [
-          {
-            "date": "2026-10-26",
-            "mm": 26.9
-          }
-        ]
+        "daily_peaks_ge_20mm": []
       },
       "source_url": "https://api.open-meteo.com/v1/forecast?latitude=37.55&longitude=126.875&timezone=Asia%2FSeoul&forecast_days=7&models=ecmwf_ifs025&hourly=precipitation%2Cprecipitation_probability%2Ctemperature_2m&daily=precipitation_sum%2Cprecipitation_probability_max%2Ctemperature_2m_min%2Ctemperature_2m_max",
-      "retrieved_at_kst": "2026-10-21T10:41:15+09:00",
+      "retrieved_at_kst": "2026-10-21T20:14:51+09:00",
       "api_model": null,
       "hourly_units": {
         "time": "iso8601",
@@ -104,57 +100,62 @@
             "date": "2026-10-21",
             "precipitation_mm": 0.2,
             "precipitation_probability_max_pct": 77,
-            "temperature_min_c": 10.2,
+            "temperature_min_c": 10.1,
             "temperature_max_c": 17.9
           },
           {
             "date": "2026-10-22",
             "precipitation_mm": 0.0,
             "precipitation_probability_max_pct": 0,
-            "temperature_min_c": 8.2,
+            "temperature_min_c": 8.3,
             "temperature_max_c": 15.5
           },
           {
             "date": "2026-10-23",
             "precipitation_mm": 0.0,
             "precipitation_probability_max_pct": 0,
-            "temperature_min_c": 11.1,
-            "temperature_max_c": 19.2
+            "temperature_min_c": 10.9,
+            "temperature_max_c": 19.6
           },
           {
             "date": "2026-10-24",
             "precipitation_mm": 0.0,
-            "precipitation_probability_max_pct": 6,
-            "temperature_min_c": 15.1,
-            "temperature_max_c": 21.4
+            "precipitation_probability_max_pct": 3,
+            "temperature_min_c": 14.7,
+            "temperature_max_c": 21.3
           },
           {
             "date": "2026-10-25",
             "precipitation_mm": 0.0,
-            "precipitation_probability_max_pct": 40,
-            "temperature_min_c": 15.1,
-            "temperature_max_c": 23.2
+            "precipitation_probability_max_pct": 33,
+            "temperature_min_c": 15.0,
+            "temperature_max_c": 24.6
           },
           {
             "date": "2026-10-26",
-            "precipitation_mm": 13.9,
+            "precipitation_mm": 22.3,
             "precipitation_probability_max_pct": 65,
-            "temperature_min_c": 14.6,
-            "temperature_max_c": 18.9
+            "temperature_min_c": 15.3,
+            "temperature_max_c": 20.2
           },
           {
             "date": "2026-10-27",
             "precipitation_mm": 0.0,
-            "precipitation_probability_max_pct": 0,
-            "temperature_min_c": 5.9,
-            "temperature_max_c": 15.4
+            "precipitation_probability_max_pct": 10,
+            "temperature_min_c": 5.2,
+            "temperature_max_c": 15.3
           }
         ],
         "hourly_peaks_ge_20mm": [],
-        "daily_peaks_ge_20mm": []
+        "daily_peaks_ge_20mm": [
+          {
+            "date": "2026-10-26",
+            "mm": 22.3
+          }
+        ]
       },
       "source_url": "https://api.open-meteo.com/v1/forecast?latitude=37.55&longitude=126.875&timezone=Asia%2FSeoul&forecast_days=7&models=ncep_gfs_global&hourly=precipitation%2Cprecipitation_probability%2Ctemperature_2m&daily=precipitation_sum%2Cprecipitation_probability_max%2Ctemperature_2m_min%2Ctemperature_2m_max",
-      "retrieved_at_kst": "2026-10-21T10:41:15+09:00",
+      "retrieved_at_kst": "2026-10-21T20:14:52+09:00",
       "api_model": null,
       "hourly_units": {
         "time": "iso8601",
@@ -176,58 +177,63 @@
           {
             "date": "2026-10-21",
             "precipitation_mm": 0.0,
-            "precipitation_probability_max_pct": null,
-            "temperature_min_c": 7.5,
+            "precipitation_probability_max_pct": 23,
+            "temperature_min_c": 7.6,
             "temperature_max_c": 16.0
           },
           {
             "date": "2026-10-22",
             "precipitation_mm": 0.0,
-            "precipitation_probability_max_pct": null,
-            "temperature_min_c": 5.1,
-            "temperature_max_c": 14.3
+            "precipitation_probability_max_pct": 0,
+            "temperature_min_c": 5.6,
+            "temperature_max_c": 14.7
           },
           {
             "date": "2026-10-23",
             "precipitation_mm": 0.0,
-            "precipitation_probability_max_pct": null,
-            "temperature_min_c": 5.9,
-            "temperature_max_c": 19.6
+            "precipitation_probability_max_pct": 3,
+            "temperature_min_c": 6.2,
+            "temperature_max_c": 18.7
           },
           {
             "date": "2026-10-24",
             "precipitation_mm": 0.0,
-            "precipitation_probability_max_pct": null,
+            "precipitation_probability_max_pct": 0,
             "temperature_min_c": 12.2,
-            "temperature_max_c": 18.8
+            "temperature_max_c": 19.1
           },
           {
             "date": "2026-10-25",
-            "precipitation_mm": 1.1,
-            "precipitation_probability_max_pct": null,
-            "temperature_min_c": 13.0,
-            "temperature_max_c": 21.3
+            "precipitation_mm": 0.3,
+            "precipitation_probability_max_pct": 12,
+            "temperature_min_c": 13.5,
+            "temperature_max_c": 24.2
           },
           {
             "date": "2026-10-26",
-            "precipitation_mm": 16.3,
-            "precipitation_probability_max_pct": null,
-            "temperature_min_c": 16.3,
-            "temperature_max_c": 17.4
+            "precipitation_mm": 36.9,
+            "precipitation_probability_max_pct": 44,
+            "temperature_min_c": 16.0,
+            "temperature_max_c": 19.6
           },
           {
             "date": "2026-10-27",
             "precipitation_mm": 0.0,
-            "precipitation_probability_max_pct": null,
-            "temperature_min_c": 10.2,
-            "temperature_max_c": 16.5
+            "precipitation_probability_max_pct": 33,
+            "temperature_min_c": 5.8,
+            "temperature_max_c": 16.0
           }
         ],
         "hourly_peaks_ge_20mm": [],
-        "daily_peaks_ge_20mm": []
+        "daily_peaks_ge_20mm": [
+          {
+            "date": "2026-10-26",
+            "mm": 36.9
+          }
+        ]
       },
       "source_url": "https://api.open-meteo.com/v1/forecast?latitude=37.55&longitude=126.875&timezone=Asia%2FSeoul&forecast_days=7&models=icon_global&hourly=precipitation%2Cprecipitation_probability%2Ctemperature_2m&daily=precipitation_sum%2Cprecipitation_probability_max%2Ctemperature_2m_min%2Ctemperature_2m_max",
-      "retrieved_at_kst": "2026-10-21T10:41:15+09:00",
+      "retrieved_at_kst": "2026-10-21T20:14:53+09:00",
       "api_model": null,
       "hourly_units": {
         "time": "iso8601",
@@ -243,137 +249,64 @@
         "temperature_2m_max": "°C"
       }
     },
-    "kma_gdps": {
-      "analysis": {
-        "daily": [
-          {
-            "date": "2026-10-21",
-            "precipitation_mm": null,
-            "precipitation_probability_max_pct": null,
-            "temperature_min_c": null,
-            "temperature_max_c": null
-          },
-          {
-            "date": "2026-10-22",
-            "precipitation_mm": null,
-            "precipitation_probability_max_pct": null,
-            "temperature_min_c": null,
-            "temperature_max_c": null
-          },
-          {
-            "date": "2026-10-23",
-            "precipitation_mm": null,
-            "precipitation_probability_max_pct": null,
-            "temperature_min_c": null,
-            "temperature_max_c": null
-          },
-          {
-            "date": "2026-10-24",
-            "precipitation_mm": null,
-            "precipitation_probability_max_pct": null,
-            "temperature_min_c": null,
-            "temperature_max_c": null
-          },
-          {
-            "date": "2026-10-25",
-            "precipitation_mm": null,
-            "precipitation_probability_max_pct": null,
-            "temperature_min_c": null,
-            "temperature_max_c": null
-          },
-          {
-            "date": "2026-10-26",
-            "precipitation_mm": null,
-            "precipitation_probability_max_pct": null,
-            "temperature_min_c": null,
-            "temperature_max_c": null
-          },
-          {
-            "date": "2026-10-27",
-            "precipitation_mm": null,
-            "precipitation_probability_max_pct": null,
-            "temperature_min_c": null,
-            "temperature_max_c": null
-          }
-        ],
-        "hourly_peaks_ge_20mm": [],
-        "daily_peaks_ge_20mm": []
-      },
-      "source_url": "https://api.open-meteo.com/v1/forecast?latitude=37.55&longitude=126.875&timezone=Asia%2FSeoul&forecast_days=7&models=kma_gdps&hourly=precipitation%2Cprecipitation_probability%2Ctemperature_2m&daily=precipitation_sum%2Cprecipitation_probability_max%2Ctemperature_2m_min%2Ctemperature_2m_max",
-      "retrieved_at_kst": "2026-10-21T10:41:16+09:00",
-      "api_model": null,
-      "hourly_units": {
-        "time": "iso8601",
-        "precipitation": "mm",
-        "precipitation_probability": "undefined",
-        "temperature_2m": "°C"
-      },
-      "daily_units": {
-        "time": "iso8601",
-        "precipitation_sum": "mm",
-        "precipitation_probability_max": "undefined",
-        "temperature_2m_min": "°C",
-        "temperature_2m_max": "°C"
-      }
-    },
     "gem_global": {
       "analysis": {
         "daily": [
           {
             "date": "2026-10-21",
-            "precipitation_mm": 1.2,
+            "precipitation_mm": 1.1,
             "precipitation_probability_max_pct": 57,
-            "temperature_min_c": 7.1,
-            "temperature_max_c": 15.7
+            "temperature_min_c": 6.6,
+            "temperature_max_c": 16.3
           },
           {
             "date": "2026-10-22",
             "precipitation_mm": 0.0,
             "precipitation_probability_max_pct": 0,
-            "temperature_min_c": 1.9,
-            "temperature_max_c": 14.6
+            "temperature_min_c": 2.3,
+            "temperature_max_c": 15.1
           },
           {
             "date": "2026-10-23",
             "precipitation_mm": 0.0,
-            "precipitation_probability_max_pct": 5,
+            "precipitation_probability_max_pct": 10,
             "temperature_min_c": 1.8,
-            "temperature_max_c": 21.8
+            "temperature_max_c": 21.6
           },
           {
             "date": "2026-10-24",
-            "precipitation_mm": 0.0,
-            "precipitation_probability_max_pct": 24,
-            "temperature_min_c": 12.1,
-            "temperature_max_c": 20.0
+            "precipitation_mm": 0.1,
+            "precipitation_probability_max_pct": 17,
+            "temperature_min_c": 12.6,
+            "temperature_max_c": 19.6
           },
           {
             "date": "2026-10-25",
-            "precipitation_mm": 0.6,
-            "precipitation_probability_max_pct": 24,
-            "temperature_min_c": 12.5,
-            "temperature_max_c": 26.8
+            "precipitation_mm": 0.0,
+            "precipitation_probability_max_pct": 20,
+            "temperature_min_c": 12.1,
+            "temperature_max_c": 26.9
           },
           {
             "date": "2026-10-26",
             "precipitation_mm": 0.0,
-            "precipitation_probability_max_pct": 39,
-            "temperature_min_c": 11.5,
+            "precipitation_probability_max_pct": 29,
+            "temperature_min_c": 10.3,
             "temperature_max_c": 21.5
           },
           {
             "date": "2026-10-27",
-            "precipitation_mm": 0.0,
-            "precipitation_probability_max_pct": 19,
-            "temperature_min_c": 7.3,
-            "temperature_max_c": 18.3
+            "precipitation_mm": 5.7,
+            "precipitation_probability_max_pct": 15,
+            "temperature_min_c": 2.7,
+            "temperature_max_c": 15.2
           }
         ],
         "hourly_peaks_ge_20mm": [],
         "daily_peaks_ge_20mm": []
       },
       "source_url": "https://api.open-meteo.com/v1/forecast?latitude=37.55&longitude=126.875&timezone=Asia%2FSeoul&forecast_days=7&models=gem_global&hourly=precipitation%2Cprecipitation_probability%2Ctemperature_2m&daily=precipitation_sum%2Cprecipitation_probability_max%2Ctemperature_2m_min%2Ctemperature_2m_max",
-      "retrieved_at_kst": "2026-10-21T10:41:16+09:00",
+      "retrieved_at_kst": "2026-10-21T20:15:29+09:00",
       "api_model": null,
       "hourly_units": {
         "time": "iso8601",
@@ -392,10 +325,16 @@
   },
   "threshold_events": [
     {
-      "model": "ecmwf_ifs025",
+      "model": "ncep_gfs_global",
       "type": "daily",
       "date": "2026-10-26",
-      "mm": 26.9
+      "mm": 22.3
+    },
+    {
+      "model": "icon_global",
+      "type": "daily",
+      "date": "2026-10-26",
+      "mm": 36.9
     }
   ]
 }
