@@ -162,3 +162,55 @@ jobs:
                       raise RuntimeError("Telegram API returned ok=false")
           print(f"Telegram delivery succeeded: {len(messages)} formatted message(s)")
           PY
+
+      - name: Notify Telegram on workflow failure
+        if: ${{ failure() }}
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          GITHUB_WORKFLOW: ${{ github.workflow }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          GITHUB_RUN_ATTEMPT: ${{ github.run_attempt }}
+          GITHUB_REF_NAME: ${{ github.ref_name }}
+          GITHUB_SERVER_URL: ${{ github.server_url }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          if [ -z "$TELEGRAM_BOT_TOKEN" ] || [ -z "$TELEGRAM_CHAT_ID" ]; then
+            echo "::warning::Cannot send failure alert because Telegram secrets are missing."
+            exit 0
+          fi
+          python - <<'PY'
+          import html, json, os, urllib.request
+
+          workflow = os.environ.get("GITHUB_WORKFLOW", "Mapo rain monitor")
+          repo = os.environ.get("GITHUB_REPOSITORY", "dj-gang/mapo-rain-monitor")
+          run_id = os.environ["GITHUB_RUN_ID"]
+          attempt = os.environ.get("GITHUB_RUN_ATTEMPT", "1")
+          ref = os.environ.get("GITHUB_REF_NAME", "unknown")
+          base = os.environ.get("GITHUB_SERVER_URL", "https://github.com")
+          run_url = f"{base}/{repo}/actions/runs/{run_id}"
+          message = (
+              "❌ <b>마포구 강수 모니터링 실행 실패</b>\n"
+              f"워크플로: {html.escape(workflow)}\n"
+              f"브랜치: <code>{html.escape(ref)}</code> · 시도: {html.escape(attempt)}\n"
+              "이번 실행의 보고서가 정상적으로 전달되지 않았을 수 있습니다.\n"
+              f'오류 로그: <a href="{html.escape(run_url, quote=True)}">GitHub Actions 실행 기록 열기</a>'
+          )
+          body = json.dumps({
+              "chat_id": os.environ["TELEGRAM_CHAT_ID"],
+              "text": message,
+              "parse_mode": "HTML",
+              "disable_web_page_preview": True
+          }).encode()
+          req = urllib.request.Request(
+              f"https://api.telegram.org/bot{os.environ['TELEGRAM_BOT_TOKEN']}/sendMessage",
+              data=body,
+              headers={"Content-Type": "application/json"},
+              method="POST"
+          )
+          with urllib.request.urlopen(req, timeout=20) as response:
+              result = json.loads(response.read().decode())
+              if not result.get("ok"):
+                  raise RuntimeError("Telegram API returned ok=false")
+          print("Telegram failure alert sent.")
+          PY
