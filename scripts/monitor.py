@@ -39,6 +39,15 @@ def fetch(model):
         try:
             with urlopen(req, timeout=30) as resp:
                 payload = json.loads(resp.read().decode("utf-8"))
+            daily = payload.get("daily") or {}
+            hourly = payload.get("hourly") or {}
+            daily_rain = daily.get("precipitation_sum") or []
+            hourly_rain = hourly.get("precipitation") or []
+            # A 200 response with empty/all-null core arrays is not valid forecast data.
+            valid_daily = any(v is not None for v in daily_rain)
+            valid_hourly = any(v is not None for v in hourly_rain)
+            if not (daily.get("time") and (valid_daily or valid_hourly)):
+                raise ValueError("API returned empty or all-null precipitation arrays")
             payload["_source_url"] = url
             payload["_retrieved_at_kst"] = datetime.now(ZoneInfo(TZ)).isoformat(timespec="seconds")
             payload["_requested_model"] = model
@@ -151,10 +160,11 @@ if all_peaks:
     first = all_peaks[0]
     when = first.get("time", first.get("date", "일시 확인 필요"))
     amount = first.get("mm", "확인 불가")
-    lines += ["", "## 시공업체 전달 문구", "",
-              f"마포구 {when} 시간당 최대 {amount}mm 예보, 지하1층 누수 점검 대기 부탁드립니다.",
-              "",
-              "※ 일강수량 기준만 충족한 경우에도 위 문구의 시간당 수치는 일강수량을 뜻하지 않으므로, 전달 전 시간당 예보를 확인하세요."]
+    if first["type"] == "hourly":
+        contractor = f"마포구 {when} 시간당 최대 {amount}mm 예보({first['model']}), 지하1층 누수 점검 대기 부탁드립니다."
+    else:
+        contractor = f"마포구 {when} 일강수량 {amount}mm 예보({first['model']}), 지하1층 누수 점검 대기 부탁드립니다."
+    lines += ["", "## 시공업체 전달 문구", "", contractor]
 else:
     lines.append("- 확인된 임계치 초과 없음." if results and not failures else "- 모델 응답이 불완전해 임계치 미충족으로 단정할 수 없습니다.")
 lines += ["", "## 모델별 원자료 출처", ""]
