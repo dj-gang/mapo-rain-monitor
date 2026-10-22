@@ -2,8 +2,9 @@ name: Mapo rain monitor
 on:
   workflow_dispatch:
   schedule:
-    # TEMP DEBUG ONLY: single 10-minute schedule to refresh/verify GitHub's schedule registration.
-    - cron: "*/10 * * * *"
+    # Daily report at 07:05 and 18:05 Korea Standard Time (UTC cron).
+    - cron: "5 22 * * *"
+    - cron: "5 9 * * *"
 permissions:
   contents: write
 concurrency:
