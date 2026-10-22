@@ -21,6 +21,7 @@ jobs:
         with:
           python-version: "3.12"
       - name: Fetch forecasts
+        id: fetch_forecasts
         run: python scripts/monitor.py
       - name: Commit latest report
         run: |
@@ -34,6 +35,7 @@ jobs:
             git push
           fi
       - name: Send formatted report to Telegram
+        id: send_report
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
@@ -174,6 +176,8 @@ jobs:
           GITHUB_REF_NAME: ${{ github.ref_name }}
           GITHUB_SERVER_URL: ${{ github.server_url }}
           GITHUB_REPOSITORY: ${{ github.repository }}
+          FORECAST_OUTCOME: ${{ steps.fetch_forecasts.outcome }}
+          REPORT_SEND_OUTCOME: ${{ steps.send_report.outcome }}
         run: |
           if [ -z "$TELEGRAM_BOT_TOKEN" ] || [ -z "$TELEGRAM_CHAT_ID" ]; then
             echo "::warning::Cannot send failure alert because Telegram secrets are missing."
@@ -188,12 +192,22 @@ jobs:
           attempt = os.environ.get("GITHUB_RUN_ATTEMPT", "1")
           ref = os.environ.get("GITHUB_REF_NAME", "unknown")
           base = os.environ.get("GITHUB_SERVER_URL", "https://github.com")
+          forecast_outcome = os.environ.get("FORECAST_OUTCOME", "unknown")
+          send_outcome = os.environ.get("REPORT_SEND_OUTCOME", "unknown")
           run_url = f"{base}/{repo}/actions/runs/{run_id}"
+          if forecast_outcome == "failure":
+              category = "예보 수집/분석 실패"
+              detail = "예보 API 또는 보고서 생성 단계에서 실패했습니다."
+          elif send_outcome == "failure":
+              category = "텔레그램 보고서 전송 실패"
+              detail = "예보 처리 후 텔레그램 전송이 실패했습니다. 봇 토큰·채팅 ID·Telegram API 응답을 확인하세요."
+          else:
+              category = "워크플로 내부 단계 실패"
+              detail = "커밋 또는 다른 작업 단계가 실패했습니다."
           message = (
-              "❌ <b>마포구 강수 모니터링 실행 실패</b>\n"
-              f"워크플로: {html.escape(workflow)}\n"
+              f"❌ <b>마포구 모니터링: {html.escape(category)}</b>\n"
+              f"{html.escape(detail)}\n"
               f"브랜치: <code>{html.escape(ref)}</code> · 시도: {html.escape(attempt)}\n"
-              "이번 실행의 보고서가 정상적으로 전달되지 않았을 수 있습니다.\n"
               f'오류 로그: <a href="{html.escape(run_url, quote=True)}">GitHub Actions 실행 기록 열기</a>'
           )
           body = json.dumps({
