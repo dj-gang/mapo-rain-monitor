@@ -2,8 +2,8 @@ name: Mapo rain monitor
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 22 * * *" # 07:00 KST
-    - cron: "0 9 * * *"  # 18:00 KST
+    - cron: "5 22 * * *" # 07:05 KST (avoid exact-hour congestion)
+    - cron: "5 9 * * *"  # 18:05 KST (avoid exact-hour congestion)
 permissions:
   contents: write
 concurrency:
