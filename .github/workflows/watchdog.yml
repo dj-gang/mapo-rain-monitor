@@ -21,7 +21,10 @@ jobs:
           GITHUB_SERVER_URL: ${{ github.server_url }}
           GITHUB_RUN_ID: ${{ github.run_id }}
         run: |
-          python - <<'PY'
+          echo "DIAG watchdog_run_id=$GITHUB_RUN_ID event=$GITHUB_EVENT_NAME utc=$(date -u --iso-8601=seconds) kst=$(TZ=Asia/Seoul date --iso-8601=seconds)"
+          if [ -n "$TELEGRAM_BOT_TOKEN" ]; then echo "DIAG watchdog_telegram_token_present=true"; else echo "DIAG watchdog_telegram_token_present=false"; fi
+          if [ -n "$TELEGRAM_CHAT_ID" ]; then echo "DIAG watchdog_telegram_chat_id_present=true"; else echo "DIAG watchdog_telegram_chat_id_present=false"; fi
+          python -u - <<'PY'
           import datetime as dt
           import json
           import os
@@ -62,22 +65,25 @@ jobs:
               data = json.loads(response.read().decode("utf-8"))
 
           runs = data.get("workflow_runs", [])
+          print(f"DIAG api_runs_returned={len(runs)} target_slot={slot} target_utc={target.isoformat()} now_utc={now.isoformat()}", flush=True)
           window_start = target - dt.timedelta(minutes=2)
           window_end = target + dt.timedelta(minutes=18)
+          print(f"DIAG expected_run_window_start={window_start.isoformat()} expected_run_window_end={window_end.isoformat()}", flush=True)
           candidates = []
           for run in runs:
               created = dt.datetime.fromisoformat(run["created_at"].replace("Z", "+00:00"))
               if run.get("event") == "schedule" and window_start <= created <= window_end:
-                  candidates.append(run)
+                  print(f"DIAG observed_run id={run.get('id')} event={run.get('event')} created_at={run.get('created_at')} status={run.get('status')} conclusion={run.get('conclusion')}", flush=True)
+              candidates.append(run)
 
           if candidates:
               latest = max(candidates, key=lambda r: r["created_at"])
-              print(f"Scheduled run found: id={latest['id']} status={latest['status']} conclusion={latest.get('conclusion')}")
+              print(f"DIAG SCHEDULE_CHECK=FOUND id={latest['id']} status={latest['status']} conclusion={latest.get('conclusion')} url={latest.get('html_url')}", flush=True)
               # A started run is not a missed trigger. The monitor workflow sends its own
               # categorized failure notification if a step fails.
               raise SystemExit(0)
 
-          print(f"No scheduled monitor run found for slot {slot}; sending missing-run alert.")
+          print(f"DIAG SCHEDULE_CHECK=MISSING slot={slot}; sending missing-run alert.", flush=True)
           bot_token = os.environ.get("TELEGRAM_BOT_TOKEN", "")
           chat_id = os.environ.get("TELEGRAM_CHAT_ID", "")
           if not bot_token or not chat_id:
@@ -103,8 +109,10 @@ jobs:
               method="POST"
           )
           with urllib.request.urlopen(req, timeout=20) as response:
-              result = json.loads(response.read().decode("utf-8"))
+              raw = response.read().decode("utf-8")
+              result = json.loads(raw)
+              print(f"DIAG watchdog_telegram_response http_status={response.status} api_ok={result.get('ok')} message_id={result.get('result', {}).get('message_id')}", flush=True)
               if not result.get("ok"):
-                  raise RuntimeError("Telegram API returned ok=false")
-          print("Missed-schedule Telegram alert sent.")
+                  raise RuntimeError(f"Telegram API returned ok=false description={result.get('description', 'unknown')}")
+          print("DIAG watchdog_alert_delivery=SUCCESS", flush=True)
           PY
