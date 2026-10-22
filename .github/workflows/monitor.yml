@@ -16,24 +16,54 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Runtime and schedule diagnostics
+        env:
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+          GITHUB_REF_NAME: ${{ github.ref_name }}
+          GITHUB_SHA: ${{ github.sha }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          GITHUB_RUN_ATTEMPT: ${{ github.run_attempt }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          echo "DIAG run_id=$GITHUB_RUN_ID attempt=$GITHUB_RUN_ATTEMPT event=$GITHUB_EVENT_NAME ref=$GITHUB_REF_NAME sha=$GITHUB_SHA"
+          echo "DIAG runner_utc=$(date -u --iso-8601=seconds) runner_kst=$(TZ=Asia/Seoul date --iso-8601=seconds)"
+          if [ -n "$TELEGRAM_BOT_TOKEN" ]; then echo "DIAG telegram_token_present=true"; else echo "DIAG telegram_token_present=false"; fi
+          if [ -n "$TELEGRAM_CHAT_ID" ]; then echo "DIAG telegram_chat_id_present=true"; else echo "DIAG telegram_chat_id_present=false"; fi
+          echo "DIAG secret values are intentionally not printed."
+          echo "DIAG event payload:"
+          python -c 'import json,os; p=os.environ.get("GITHUB_EVENT_PATH"); d=json.load(open(p)) if p else {}; print(json.dumps({k:d.get(k) for k in ("schedule","workflow","ref","repository") if k in d}))'
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
       - name: Fetch forecasts
         id: fetch_forecasts
-        run: python scripts/monitor.py
-      - name: Commit latest report
         run: |
+          set -o pipefail
+          mkdir -p reports
+          python -u scripts/monitor.py 2>&1 | tee reports/debug-monitor.log
+      - name: Commit latest report
+        id: commit_report
+        run: |
+          echo "DIAG git status before report commit:"
+          git status --short
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add reports/latest.md reports/latest.json
+          echo "DIAG staged diff summary:"
+          git diff --cached --stat
           if git diff --cached --quiet; then
-            echo "No report changes to commit"
+            echo "DIAG report files unchanged; no commit required"
           else
             git commit -m "Update Mapo rainfall forecast report"
+            echo "DIAG commit created: $(git rev-parse HEAD)"
             git push
+            echo "DIAG git push succeeded"
           fi
+          echo "DIAG report file metadata:"
+          ls -l --time-style=long-iso reports/latest.md reports/latest.json
       - name: Send formatted report to Telegram
         id: send_report
         env:
@@ -41,14 +71,21 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
           if [ -z "$TELEGRAM_BOT_TOKEN" ] || [ -z "$TELEGRAM_CHAT_ID" ]; then
-            echo "::warning::Telegram is not configured. Add TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID in repository Actions secrets."
-            exit 0
+            echo "::error::Telegram secrets missing. Report generated but cannot be sent."
+            exit 1
           fi
           python - <<'PY'
-          import html, json, os, urllib.request
+          import html, json, os, sys, time, urllib.request
+          from urllib.error import HTTPError, URLError
           from pathlib import Path
 
-          report = json.loads(Path("reports/latest.json").read_text(encoding="utf-8"))
+          started = time.monotonic()
+          print("DIAG telegram_payload_read_start", flush=True)
+          report_path = Path("reports/latest.json")
+          if not report_path.exists():
+              raise FileNotFoundError("reports/latest.json missing before Telegram send")
+          report = json.loads(report_path.read_text(encoding="utf-8"))
+          print(f"DIAG report_loaded bytes={report_path.stat().st_size} generated_at_kst={report.get('generated_at_kst')} status={report.get('status')} model_count={len(report.get('models', {}))} failed_model_count={len(report.get('failed_models', {}))}", flush=True)
           models = report.get("models", {})
           failures = report.get("failed_models", {})
           model_order = [
@@ -142,7 +179,8 @@ jobs:
 
           token = os.environ["TELEGRAM_BOT_TOKEN"]
           chat_id = os.environ["TELEGRAM_CHAT_ID"]
-          for message in messages:
+          print(f"DIAG telegram_messages_prepared count={len(messages)} lengths={[len(m) for m in messages]}", flush=True)
+          for index, message in enumerate(messages, 1):
               # Stay comfortably under Telegram's 4096-character message limit.
               if len(message) > 3900:
                   message = message[:3850] + "\n… (상세 보고서는 GitHub 링크 참고)"
@@ -158,13 +196,50 @@ jobs:
                   headers={"Content-Type": "application/json"},
                   method="POST"
               )
-              with urllib.request.urlopen(req, timeout=20) as response:
-                  result = json.loads(response.read().decode())
-                  if not result.get("ok"):
-                      raise RuntimeError("Telegram API returned ok=false")
-          print(f"Telegram delivery succeeded: {len(messages)} formatted message(s)")
+              try:
+                  with urllib.request.urlopen(req, timeout=20) as response:
+                      result = json.loads(response.read().decode())
+                      print(f"DIAG telegram_response message={index}/{len(messages)} http_status={response.status} api_ok={result.get('ok')} message_id={result.get('result', {}).get('message_id')} elapsed_s={time.monotonic()-started:.2f}", flush=True)
+                      if not result.get("ok"):
+                          raise RuntimeError(f"Telegram API ok=false description={result.get('description', 'no description')}")
+              except HTTPError as exc:
+                  body_text = exc.read().decode("utf-8", errors="replace")[:1000]
+                  print(f"DIAG telegram_http_error message={index} http_status={exc.code} response={body_text}", file=sys.stderr, flush=True)
+                  raise
+              except (URLError, TimeoutError) as exc:
+                  print(f"DIAG telegram_transport_error message={index} type={type(exc).__name__} detail={exc}", file=sys.stderr, flush=True)
+                  raise
+          print(f"DIAG telegram_delivery_complete messages={len(messages)} elapsed_total_s={time.monotonic()-started:.2f}", flush=True)
           PY
 
+      - name: Upload debug logs
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: mapo-rain-debug-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            reports/debug-monitor.log
+            reports/latest.md
+            reports/latest.json
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Write diagnostic summary
+        if: ${{ always() }}
+        env:
+          FETCH_OUTCOME: ${{ steps.fetch_forecasts.outcome }}
+          COMMIT_OUTCOME: ${{ steps.commit_report.outcome }}
+          SEND_OUTCOME: ${{ steps.send_report.outcome }}
+        run: |
+          {
+            echo "## Mapo rain monitor diagnostics"
+            echo "- Run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+            echo "- Event: $GITHUB_EVENT_NAME"
+            echo "- UTC: $(date -u --iso-8601=seconds)"
+            echo "- KST: $(TZ=Asia/Seoul date --iso-8601=seconds)"
+            echo "- Forecast step: $FETCH_OUTCOME"
+            echo "- Report commit step: $COMMIT_OUTCOME"
+            echo "- Telegram step: $SEND_OUTCOME"
+          } >> "$GITHUB_STEP_SUMMARY"
       - name: Notify Telegram on workflow failure
         if: ${{ failure() }}
         env:
