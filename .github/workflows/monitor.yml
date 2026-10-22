@@ -2,9 +2,8 @@ name: Mapo rain monitor
 on:
   workflow_dispatch:
   schedule:
-    # Daily report at 07:05 and 18:05 Korea Standard Time (UTC cron).
-    - cron: "5 22 * * *"
-    - cron: "5 9 * * *"
+    # TEMP DEBUG ONLY: keep 10-minute runs until schedule + Telegram delivery are verified.
+    - cron: "*/10 * * * *"
 permissions:
   contents: write
 concurrency:
