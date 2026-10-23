@@ -71,10 +71,29 @@ jobs:
           print(f"DIAG expected_run_window_start={window_start.isoformat()} expected_run_window_end={window_end.isoformat()}", flush=True)
           candidates = []
           for run in runs:
-              created = dt.datetime.fromisoformat(run["created_at"].replace("Z", "+00:00"))
-              if run.get("event") == "schedule" and window_start <= created <= window_end:
-                  print(f"DIAG observed_run id={run.get('id')} event={run.get('event')} created_at={run.get('created_at')} status={run.get('status')} conclusion={run.get('conclusion')}", flush=True)
-              candidates.append(run)
+              if run.get("event") != "schedule":
+                  continue
+
+              matched_by = []
+              for field in ("created_at", "run_started_at"):
+                  raw_time = run.get(field)
+                  if not raw_time:
+                      continue
+                  timestamp = dt.datetime.fromisoformat(raw_time.replace("Z", "+00:00"))
+                  if window_start <= timestamp <= window_end:
+                      matched_by.append(field)
+
+              # Only runs whose creation or start time falls in this slot's window
+              # may satisfy the check. Do not treat unrelated historical runs as a match.
+              if matched_by:
+                  candidates.append(run)
+                  print(
+                      f"DIAG observed_run id={run.get('id')} event={run.get('event')} "
+                      f"created_at={run.get('created_at')} run_started_at={run.get('run_started_at')} "
+                      f"matched_by={','.join(matched_by)} status={run.get('status')} "
+                      f"conclusion={run.get('conclusion')}",
+                      flush=True
+                  )
 
           if candidates:
               latest = max(candidates, key=lambda r: r["created_at"])
