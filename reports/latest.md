@@ -1,31 +1,31 @@
 # 마포구 7일 다중모델 강수 모니터링
 
-- 확인 시각: 2026-10-23T05:47:15+09:00 (KST)
+- 확인 시각: 2026-10-23T10:28:45+09:00 (KST)
 - 판정: **기준 충족**
 - 위치: 서울 마포구 (37.55, 126.875)
 - 기준: 시간당 강수량 20mm 이상 또는 일강수량 20mm 이상
 
 | 날짜 | 모델 | 일강수량(mm) | 강수확률 최대(%) | 최저(°C) | 최고(°C) |
 |---|---|---:|---:|---:|---:|
-| 2026-10-23 | ecmwf_ifs025 | 0.0 | 6 | 7.1 | 20.4 |
-| 2026-10-24 | ecmwf_ifs025 | 0.0 | 18 | 13.1 | 19.9 |
-| 2026-10-25 | ecmwf_ifs025 | 0.0 | 13 | 11.3 | 24.6 |
-| 2026-10-26 | ecmwf_ifs025 | 0.6 | 22 | 15.7 | 19.7 |
-| 2026-10-27 | ecmwf_ifs025 | -0.2 | 2 | 5.4 | 16.3 |
-| 2026-10-28 | ecmwf_ifs025 | 0.0 | 0 | 2.2 | 14.2 |
-| 2026-10-29 | ecmwf_ifs025 | 9.2 | 57 | 7.4 | 14.6 |
-| 2026-10-23 | ncep_gfs_global | 0.0 | 0 | 10.6 | 20.3 |
-| 2026-10-24 | ncep_gfs_global | 0.0 | 16 | 15.9 | 19.6 |
-| 2026-10-25 | ncep_gfs_global | 0.0 | 3 | 14.8 | 24.6 |
-| 2026-10-26 | ncep_gfs_global | 0.0 | 16 | 17.0 | 21.0 |
-| 2026-10-27 | ncep_gfs_global | 0.1 | 3 | 5.2 | 17.6 |
-| 2026-10-28 | ncep_gfs_global | 0.0 | 0 | 4.8 | 11.9 |
-| 2026-10-29 | ncep_gfs_global | 18.6 | 39 | 8.2 | 11.7 |
-| 2026-10-23 | icon_global | 0.0 | 0 | 5.2 | 20.3 |
-| 2026-10-24 | icon_global | 0.0 | 5 | 12.7 | 19.4 |
-| 2026-10-25 | icon_global | 0.0 | 5 | 12.8 | 25.6 |
-| 2026-10-26 | icon_global | 0.0 | 15 | 16.0 | 24.4 |
-| 2026-10-27 | icon_global | 0.0 | 3 | 3.4 | 17.3 |
+| 2026-10-23 | ecmwf_ifs025 | 0.0 | 3 | 6.8 | 20.4 |
+| 2026-10-24 | ecmwf_ifs025 | 0.0 | 13 | 13.3 | 19.9 |
+| 2026-10-25 | ecmwf_ifs025 | 0.0 | 10 | 11.3 | 24.4 |
+| 2026-10-26 | ecmwf_ifs025 | 0.5 | 25 | 15.6 | 20.3 |
+| 2026-10-27 | ecmwf_ifs025 | 0.0 | 4 | 5.4 | 17.0 |
+| 2026-10-28 | ecmwf_ifs025 | 0.0 | 0 | 2.7 | 12.7 |
+| 2026-10-29 | ecmwf_ifs025 | 1.6 | 35 | 7.0 | 15.7 |
+| 2026-10-23 | ncep_gfs_global | 0.0 | 0 | 10.4 | 20.4 |
+| 2026-10-24 | ncep_gfs_global | 0.0 | 20 | 16.3 | 19.4 |
+| 2026-10-25 | ncep_gfs_global | 0.0 | 3 | 14.3 | 24.0 |
+| 2026-10-26 | ncep_gfs_global | 0.0 | 14 | 16.3 | 19.8 |
+| 2026-10-27 | ncep_gfs_global | 0.0 | 6 | 5.4 | 16.8 |
+| 2026-10-28 | ncep_gfs_global | 0.0 | 2 | 5.1 | 13.0 |
+| 2026-10-29 | ncep_gfs_global | 6.6 | 56 | 9.8 | 14.8 |
+| 2026-10-23 | icon_global | 0.0 | 0 | 5.2 | 19.6 |
+| 2026-10-24 | icon_global | 0.0 | 5 | 12.5 | 19.8 |
+| 2026-10-25 | icon_global | 0.0 | 5 | 13.9 | 25.0 |
+| 2026-10-26 | icon_global | 0.0 | 15 | 16.4 | 23.8 |
+| 2026-10-27 | icon_global | 0.0 | 3 | 4.7 | 17.9 |
 | 2026-10-28 | icon_global | 0.0 | 0 | 0.2 | 9.8 |
 | 2026-10-29 | icon_global | 2.4 | 18 | 3.3 | 14.0 |
 | 2026-10-23 | gem_global | 0.0 | 0 | 1.7 | 21.9 |
@@ -46,14 +46,14 @@
 
 ## 모델별 원자료 출처
 
-- ecmwf_ifs025: https://api.open-meteo.com/v1/forecast?latitude=37.55&longitude=126.875&timezone=Asia%2FSeoul&forecast_days=7&models=ecmwf_ifs025&hourly=precipitation%2Cprecipitation_probability%2Ctemperature_2m&daily=precipitation_sum%2Cprecipitation_probability_max%2Ctemperature_2m_min%2Ctemperature_2m_max (수집 2026-10-23T05:46:38+09:00)
-- ncep_gfs_global: https://api.open-meteo.com/v1/forecast?latitude=37.55&longitude=126.875&timezone=Asia%2FSeoul&forecast_days=7&models=ncep_gfs_global&hourly=precipitation%2Cprecipitation_probability%2Ctemperature_2m&daily=precipitation_sum%2Cprecipitation_probability_max%2Ctemperature_2m_min%2Ctemperature_2m_max (수집 2026-10-23T05:46:40+09:00)
-- icon_global: https://api.open-meteo.com/v1/forecast?latitude=37.55&longitude=126.875&timezone=Asia%2FSeoul&forecast_days=7&models=icon_global&hourly=precipitation%2Cprecipitation_probability%2Ctemperature_2m&daily=precipitation_sum%2Cprecipitation_probability_max%2Ctemperature_2m_min%2Ctemperature_2m_max (수집 2026-10-23T05:46:40+09:00)
-- gem_global: https://api.open-meteo.com/v1/forecast?latitude=37.55&longitude=126.875&timezone=Asia%2FSeoul&forecast_days=7&models=gem_global&hourly=precipitation%2Cprecipitation_probability%2Ctemperature_2m&daily=precipitation_sum%2Cprecipitation_probability_max%2Ctemperature_2m_min%2Ctemperature_2m_max (수집 2026-10-23T05:47:15+09:00)
+- ecmwf_ifs025: https://api.open-meteo.com/v1/forecast?latitude=37.55&longitude=126.875&timezone=Asia%2FSeoul&forecast_days=7&models=ecmwf_ifs025&hourly=precipitation%2Cprecipitation_probability%2Ctemperature_2m&daily=precipitation_sum%2Cprecipitation_probability_max%2Ctemperature_2m_min%2Ctemperature_2m_max (수집 2026-10-23T10:28:39+09:00)
+- ncep_gfs_global: https://api.open-meteo.com/v1/forecast?latitude=37.55&longitude=126.875&timezone=Asia%2FSeoul&forecast_days=7&models=ncep_gfs_global&hourly=precipitation%2Cprecipitation_probability%2Ctemperature_2m&daily=precipitation_sum%2Cprecipitation_probability_max%2Ctemperature_2m_min%2Ctemperature_2m_max (수집 2026-10-23T10:28:40+09:00)
+- icon_global: https://api.open-meteo.com/v1/forecast?latitude=37.55&longitude=126.875&timezone=Asia%2FSeoul&forecast_days=7&models=icon_global&hourly=precipitation%2Cprecipitation_probability%2Ctemperature_2m&daily=precipitation_sum%2Cprecipitation_probability_max%2Ctemperature_2m_min%2Ctemperature_2m_max (수집 2026-10-23T10:28:40+09:00)
+- gem_global: https://api.open-meteo.com/v1/forecast?latitude=37.55&longitude=126.875&timezone=Asia%2FSeoul&forecast_days=7&models=gem_global&hourly=precipitation%2Cprecipitation_probability%2Ctemperature_2m&daily=precipitation_sum%2Cprecipitation_probability_max%2Ctemperature_2m_min%2Ctemperature_2m_max (수집 2026-10-23T10:28:45+09:00)
 
 ## 응답 실패 모델
 
-- kma_gdps: URLError: <urlopen error _ssl.c:993: The handshake operation timed out>
+- kma_gdps: ValueError: API returned empty or all-null precipitation arrays
 
 ## 해석 주의
 
