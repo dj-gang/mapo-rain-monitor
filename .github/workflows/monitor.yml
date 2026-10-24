@@ -2,8 +2,10 @@ name: Mapo rain monitor
 on:
   workflow_dispatch:
   schedule:
-    # TEMP DEBUG ONLY: keep 10-minute runs until schedule + Telegram delivery are verified.
+    # Keep 10-minute debug runs and also run the requested daily report slots (GitHub cron uses UTC).
     - cron: "*/10 * * * *"
+    - cron: "5 22 * * *" # 07:05 KST
+    - cron: "5 9 * * *"  # 18:05 KST
 permissions:
   contents: write
 concurrency:
