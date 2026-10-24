@@ -81,7 +81,10 @@ def analyze(payload):
     daily = payload.get("daily", {})
     hourly = payload.get("hourly", {})
     daily_dates = daily.get("time", [])
-    totals = daily.get("precipitation_sum", [])
+    raw_totals = daily.get("precipitation_sum", [])
+    # Rainfall cannot be negative; normalize small model/API artifacts to 0.0
+    # before both threshold analysis and report generation. Thresholds remain unchanged.
+    totals = [None if v is None else max(0.0, float(v)) for v in raw_totals]
     tmins = daily.get("temperature_2m_min", [])
     tmaxs = daily.get("temperature_2m_max", [])
     probs = daily.get("precipitation_probability_max", [])
