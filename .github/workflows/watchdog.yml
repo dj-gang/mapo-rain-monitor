@@ -66,11 +66,13 @@ jobs:
               else:
                   target_hour = 9
                   slot = "저녁 18:05 KST"
-              target = now.replace(hour=target_hour, minute=0, second=0, microsecond=0)
+              target = now.replace(hour=target_hour, minute=5, second=0, microsecond=0)
               if target > now:
                   target -= dt.timedelta(days=1)
+              # Keep the slot window tight enough not to mistake the */10 debug
+              # run at :00 or :10 for the dedicated :05 daily report.
               window_start = target - dt.timedelta(minutes=2)
-              window_end = target + dt.timedelta(minutes=18)
+              window_end = target + dt.timedelta(minutes=4)
               print(f"DIAG target_slot={slot} window_start_utc={window_start.isoformat()} window_end_utc={window_end.isoformat()}", flush=True)
               candidates = []
               for run in runs:
