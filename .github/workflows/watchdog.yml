@@ -1,8 +1,10 @@
 name: Mapo rain monitor watchdog
 on:
-  # TEMP DEBUG ONLY: check for missed 10-minute monitor runs during verification.
+  # Keep 10-minute debug checks and check each daily report slot 15 minutes after its target.
   schedule:
     - cron: "*/10 * * * *"
+    - cron: "20 22 * * *" # 07:20 KST: check the 07:05 report
+    - cron: "20 9 * * *"  # 18:20 KST: check the 18:05 report
   workflow_dispatch:
 permissions:
   actions: read
@@ -21,8 +23,7 @@ jobs:
           GITHUB_SERVER_URL: ${{ github.server_url }}
           GITHUB_RUN_ID: ${{ github.run_id }}
         run: |
-          echo "DIAG watchdog_run_id=$GITHUB_RUN_ID event=$GITHUB_EVENT_NAME utc=$(date -u --iso-8601=seconds) kst=$(TZ=Asia/Seoul date --iso-8601=seconds)"
-          python -u - <<'PY'
+          echo "DIAG           python -u - <<'PY'
           import datetime as dt
           import json
           import os
@@ -32,9 +33,10 @@ jobs:
           repo = os.environ["GITHUB_REPOSITORY"]
           token = os.environ["GH_TOKEN"]
           now = dt.datetime.now(dt.timezone.utc)
-          # During debug mode, expect the monitor to run every 10 minutes.
-          # Allow 20 minutes for GitHub's scheduled-run delays before alerting.
-          grace = dt.timedelta(minutes=20)
+          kst = dt.timezone(dt.timedelta(hours=9))
+          event_path = os.environ.get("GITHUB_EVENT_PATH")
+          event_payload = json.load(open(event_path, encoding="utf-8")) if event_path else {}
+          schedule_expr = event_payload.get("schedule")
           params = urllib.parse.urlencode({"per_page": "100", "event": "schedule"})
           api_url = f"https://api.github.com/repos/{repo}/actions/workflows/monitor.yml/runs?{params}"
           req = urllib.request.Request(api_url, headers={
@@ -48,34 +50,85 @@ jobs:
           runs = [r for r in data.get("workflow_runs", []) if r.get("event") == "schedule"]
           parsed = []
           for run in runs:
-              raw = run.get("run_started_at") or run.get("created_at")
-              if not raw:
-                  continue
-              stamp = dt.datetime.fromisoformat(raw.replace("Z", "+00:00"))
-              parsed.append((stamp, run))
-          latest = max(parsed, key=lambda x: x[0]) if parsed else None
-          print(f"DIAG monitor_schedule_runs_returned={len(runs)} now_utc={now.isoformat()} grace_minutes={int(grace.total_seconds()/60)}", flush=True)
-          if latest:
-              stamp, run = latest
-              age = now - stamp
-              print(f"DIAG latest_monitor_run id={run.get('id')} at={stamp.isoformat()} age_minutes={age.total_seconds()/60:.1f} status={run.get('status')} conclusion={run.get('conclusion')} url={run.get('html_url')}", flush=True)
-              if age <= grace:
-                  print("DIAG SCHEDULE_CHECK=FOUND recent scheduled monitor run exists.", flush=True)
-                  raise SystemExit(0)
+              stamp_raw = run.get("run_started_at") or run.get("created_at")
+              if stamp_raw:
+                  stamp = dt.datetime.fromisoformat(stamp_raw.replace("Z", "+00:00"))
+                  parsed.append((stamp, run))
+          latest_pair = max(parsed, key=lambda item: item[0]) if parsed else None
+          latest_text = "기록 없음" if not latest_pair else latest_pair[0].astimezone(kst).strftime("%Y-%m-%d %H:%M:%S KST")
+          print(f"DIAG schedule_expr={schedule_expr!r} monitor_schedule_runs={len(runs)} now_kst={now.astimezone(kst).isoformat()}", flush=True)
 
-          latest_text = "기록 없음" if not latest else latest[0].astimezone(dt.timezone(dt.timedelta(hours=9))).strftime("%Y-%m-%d %H:%M KST")
-          print("DIAG SCHEDULE_CHECK=MISSING; sending missing-run alert.", flush=True)
+          if schedule_expr in ("20 22 * * *", "20 9 * * *"):
+              if schedule_expr == "20 22 * * *":
+                  target_hour = 22
+                  slot = "오전 07:05 KST"
+              else:
+                  target_hour = 9
+                  slot = "저녁 18:05 KST"
+              target = now.replace(hour=target_hour, minute=0, second=0, microsecond=0)
+              if target > now:
+                  target -= dt.timedelta(days=1)
+              window_start = target - dt.timedelta(minutes=2)
+              window_end = target + dt.timedelta(minutes=18)
+              print(f"DIAG target_slot={slot} window_start_utc={window_start.isoformat()} window_end_utc={window_end.isoformat()}", flush=True)
+              candidates = []
+              for run in runs:
+                  matched_by = []
+                  for field in ("created_at", "run_started_at"):
+                      raw = run.get(field)
+                      if not raw:
+                          continue
+                      stamp = dt.datetime.fromisoformat(raw.replace("Z", "+00:00"))
+                      if window_start <= stamp <= window_end:
+                          matched_by.append(field)
+                  if matched_by:
+                      candidates.append(run)
+                      print(
+                          f"DIAG observed_run id={run.get('id')} event={run.get('event')} "
+                          f"created_at={run.get('created_at')} run_started_at={run.get('run_started_at')} "
+                          f"matched_by={','.join(matched_by)} status={run.get('status')} "
+                          f"conclusion={run.get('conclusion')} url={run.get('html_url')}",
+                          flush=True
+                      )
+              if candidates:
+                  found = max(candidates, key=lambda r: r.get("created_at") or r.get("run_started_at") or "")
+                  print(f"DIAG SLOT_CHECK=FOUND slot={slot} id={found.get('id')} status={found.get('status')} conclusion={found.get('conclusion')} url={found.get('html_url')}", flush=True)
+                  raise SystemExit(0)
+              alert_title = "마포구 강수 모니터링 예약 실행 누락 의심"
+              alert_detail = (
+                  f"확인 대상: {slot}\n"
+                  f"확인 구간(UTC): {window_start.isoformat()} - {window_end.isoformat()}\n"
+                  "해당 구간에 event=schedule인 모니터 실행이 없습니다."
+              )
+          elif schedule_expr == "*/10 * * * *":
+              grace = dt.timedelta(minutes=20)
+              print(f"DIAG DEBUG_CHECK grace_minutes={int(grace.total_seconds()/60)} latest_monitor_run={latest_text}", flush=True)
+              if latest_pair:
+                  age = now - latest_pair[0]
+                  if dt.timedelta(0) <= age <= grace:
+                      print(f"DIAG SCHEDULE_CHECK=FOUND recent scheduled monitor run age_minutes={age.total_seconds()/60:.1f}", flush=True)
+                      raise SystemExit(0)
+              alert_title = "마포구 강수 모니터링 자동 실행 누락 의심"
+              alert_detail = (
+                  "확인 대상: 10분 간격 테스트 실행\n"
+                  f"마지막 예약 실행: {latest_text}\n"
+                  "최근 20분 내 예약 실행 기록이 없습니다."
+              )
+          else:
+              print(f"DIAG no slot check for non-schedule or unexpected schedule event={os.environ.get('GITHUB_EVENT_NAME')} schedule={schedule_expr!r}; manual runs are not treated as scheduled.", flush=True)
+              raise SystemExit(0)
+
+          print(f"DIAG SCHEDULE_CHECK=MISSING; sending alert title={alert_title!r}", flush=True)
           bot_token = os.environ.get("TELEGRAM_BOT_TOKEN", "")
           chat_id = os.environ.get("TELEGRAM_CHAT_ID", "")
           if not bot_token or not chat_id:
               raise SystemExit("Telegram secrets are missing; cannot send missed-run alert.")
           run_url = f"{os.environ.get('GITHUB_SERVER_URL','https://github.com')}/{repo}/actions"
           message = (
-              "🚨 <b>마포구 강수 모니터링 자동 실행 누락 의심</b>\n"
-              "확인 대상: <b>10분 간격 테스트 실행</b>\n"
-              f"확인 시각: <code>{now.astimezone(dt.timezone(dt.timedelta(hours=9))).strftime('%Y-%m-%d %H:%M KST')}</code>\n"
-              f"마지막 예약 실행: <code>{latest_text}</code>\n"
-              f"최근 {int(grace.total_seconds()/60)}분 내 예약 실행 기록이 없습니다. GitHub Actions 지연/누락 여부를 확인하세요.\n"
+              f"🚨 <b>{alert_title}</b>\n"
+              f"{alert_detail}\n"
+              f"확인 시각: <code>{now.astimezone(kst).strftime('%Y-%m-%d %H:%M:%S KST')}</code>\n"
+              f"최근 예약 실행: <code>{latest_text}</code>\n"
               f'<a href="{run_url}">GitHub Actions 실행 기록 열기</a>'
           )
           body = json.dumps({
