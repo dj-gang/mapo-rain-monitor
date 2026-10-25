@@ -1,6 +1,6 @@
 # 마포구 7일 다중모델 강수 모니터링
 
-- 확인 시각: 2026-10-25T08:24:26+09:00 (KST)
+- 확인 시각: 2026-10-25T09:14:41+09:00 (KST)
 - 판정: **판정 불가 (일부 모델 응답 실패)**
 - 위치: 서울 마포구 (37.55, 126.875)
 - 기준: 시간당 강수량 20mm 이상 또는 일강수량 20mm 이상
@@ -14,13 +14,13 @@
 | 2026-10-29 | ecmwf_ifs025 | 0.5 | 75 | 4.8 | 12.6 |
 | 2026-10-30 | ecmwf_ifs025 | 0.5 | 78 | 4.6 | 18.5 |
 | 2026-10-31 | ecmwf_ifs025 | 0.0 | 15 | 2.5 | 13.7 |
-| 2026-10-25 | ncep_gfs_global | 0.0 | 10 | 14.6 | 23.9 |
-| 2026-10-26 | ncep_gfs_global | 0.0 | 0 | 16.3 | 20.2 |
-| 2026-10-27 | ncep_gfs_global | 0.0 | 0 | 6.6 | 16.3 |
-| 2026-10-28 | ncep_gfs_global | 0.0 | 0 | 5.7 | 12.9 |
-| 2026-10-29 | ncep_gfs_global | 1.2 | 44 | 9.8 | 15.7 |
-| 2026-10-30 | ncep_gfs_global | 15.8 | 65 | 11.6 | 18.6 |
-| 2026-10-31 | ncep_gfs_global | 0.0 | 19 | 4.0 | 12.6 |
+| 2026-10-25 | ncep_gfs_global | 0.0 | 7 | 14.3 | 24.1 |
+| 2026-10-26 | ncep_gfs_global | 0.0 | 0 | 15.5 | 20.2 |
+| 2026-10-27 | ncep_gfs_global | 0.0 | 0 | 6.9 | 15.5 |
+| 2026-10-28 | ncep_gfs_global | 0.0 | 0 | 6.2 | 13.1 |
+| 2026-10-29 | ncep_gfs_global | 4.0 | 28 | 9.6 | 15.3 |
+| 2026-10-30 | ncep_gfs_global | 1.2 | 45 | 12.4 | 18.4 |
+| 2026-10-31 | ncep_gfs_global | 0.0 | 13 | 4.9 | 13.2 |
 | 2026-10-25 | icon_global | 0.0 | 0 | 12.1 | 22.6 |
 | 2026-10-26 | icon_global | 0.0 | 0 | 14.2 | 21.5 |
 | 2026-10-27 | icon_global | 0.0 | 0 | 6.6 | 16.9 |
@@ -42,10 +42,10 @@
 
 ## 모델별 원자료 출처
 
-- ecmwf_ifs025: https://api.open-meteo.com/v1/forecast?latitude=37.55&longitude=126.875&timezone=Asia%2FSeoul&forecast_days=7&models=ecmwf_ifs025&hourly=precipitation%2Cprecipitation_probability%2Ctemperature_2m&daily=precipitation_sum%2Cprecipitation_probability_max%2Ctemperature_2m_min%2Ctemperature_2m_max (수집 2026-10-25T08:24:20+09:00)
-- ncep_gfs_global: https://api.open-meteo.com/v1/forecast?latitude=37.55&longitude=126.875&timezone=Asia%2FSeoul&forecast_days=7&models=ncep_gfs_global&hourly=precipitation%2Cprecipitation_probability%2Ctemperature_2m&daily=precipitation_sum%2Cprecipitation_probability_max%2Ctemperature_2m_min%2Ctemperature_2m_max (수집 2026-10-25T08:24:20+09:00)
-- icon_global: https://api.open-meteo.com/v1/forecast?latitude=37.55&longitude=126.875&timezone=Asia%2FSeoul&forecast_days=7&models=icon_global&hourly=precipitation%2Cprecipitation_probability%2Ctemperature_2m&daily=precipitation_sum%2Cprecipitation_probability_max%2Ctemperature_2m_min%2Ctemperature_2m_max (수집 2026-10-25T08:24:21+09:00)
-- gem_global: https://api.open-meteo.com/v1/forecast?latitude=37.55&longitude=126.875&timezone=Asia%2FSeoul&forecast_days=7&models=gem_global&hourly=precipitation%2Cprecipitation_probability%2Ctemperature_2m&daily=precipitation_sum%2Cprecipitation_probability_max%2Ctemperature_2m_min%2Ctemperature_2m_max (수집 2026-10-25T08:24:26+09:00)
+- ecmwf_ifs025: https://api.open-meteo.com/v1/forecast?latitude=37.55&longitude=126.875&timezone=Asia%2FSeoul&forecast_days=7&models=ecmwf_ifs025&hourly=precipitation%2Cprecipitation_probability%2Ctemperature_2m&daily=precipitation_sum%2Cprecipitation_probability_max%2Ctemperature_2m_min%2Ctemperature_2m_max (수집 2026-10-25T09:14:36+09:00)
+- ncep_gfs_global: https://api.open-meteo.com/v1/forecast?latitude=37.55&longitude=126.875&timezone=Asia%2FSeoul&forecast_days=7&models=ncep_gfs_global&hourly=precipitation%2Cprecipitation_probability%2Ctemperature_2m&daily=precipitation_sum%2Cprecipitation_probability_max%2Ctemperature_2m_min%2Ctemperature_2m_max (수집 2026-10-25T09:14:36+09:00)
+- icon_global: https://api.open-meteo.com/v1/forecast?latitude=37.55&longitude=126.875&timezone=Asia%2FSeoul&forecast_days=7&models=icon_global&hourly=precipitation%2Cprecipitation_probability%2Ctemperature_2m&daily=precipitation_sum%2Cprecipitation_probability_max%2Ctemperature_2m_min%2Ctemperature_2m_max (수집 2026-10-25T09:14:37+09:00)
+- gem_global: https://api.open-meteo.com/v1/forecast?latitude=37.55&longitude=126.875&timezone=Asia%2FSeoul&forecast_days=7&models=gem_global&hourly=precipitation%2Cprecipitation_probability%2Ctemperature_2m&daily=precipitation_sum%2Cprecipitation_probability_max%2Ctemperature_2m_min%2Ctemperature_2m_max (수집 2026-10-25T09:14:41+09:00)
 
 ## 응답 실패 모델
 
