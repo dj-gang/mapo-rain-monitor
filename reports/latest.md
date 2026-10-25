@@ -1,25 +1,25 @@
 # 마포구 7일 다중모델 강수 모니터링
 
-- 확인 시각: 2026-10-25T21:28:27+09:00 (KST)
+- 확인 시각: 2026-10-25T22:40:51+09:00 (KST)
 - 판정: **판정 불가 (일부 모델 응답 실패)**
 - 위치: 서울 마포구 (37.55, 126.875)
 - 기준: 시간당 강수량 20mm 이상 또는 일강수량 20mm 이상
 
 | 날짜 | 모델 | 일강수량(mm) | 강수확률 최대(%) | 최저(°C) | 최고(°C) |
 |---|---|---:|---:|---:|---:|
-| 2026-10-25 | ecmwf_ifs025 | 0.1 | 16 | 12.6 | 22.1 |
-| 2026-10-26 | ecmwf_ifs025 | 0.2 | 10 | 13.1 | 19.2 |
-| 2026-10-27 | ecmwf_ifs025 | 0.0 | 0 | 6.2 | 15.3 |
-| 2026-10-28 | ecmwf_ifs025 | 0.0 | 0 | 2.4 | 10.8 |
-| 2026-10-29 | ecmwf_ifs025 | 0.4 | 74 | 4.5 | 12.5 |
-| 2026-10-30 | ecmwf_ifs025 | 0.9 | 69 | 9.0 | 18.5 |
-| 2026-10-31 | ecmwf_ifs025 | 0.0 | 8 | 6.9 | 14.9 |
-| 2026-10-25 | ncep_gfs_global | 0.0 | 10 | 14.3 | 24.0 |
+| 2026-10-25 | ecmwf_ifs025 | 0.1 | 10 | 12.6 | 22.4 |
+| 2026-10-26 | ecmwf_ifs025 | 1.5 | 4 | 12.8 | 18.0 |
+| 2026-10-27 | ecmwf_ifs025 | 0.0 | 0 | 5.8 | 15.0 |
+| 2026-10-28 | ecmwf_ifs025 | 0.0 | 0 | 2.5 | 11.0 |
+| 2026-10-29 | ecmwf_ifs025 | 1.9 | 76 | 4.8 | 12.0 |
+| 2026-10-30 | ecmwf_ifs025 | 2.4 | 71 | 8.5 | 18.2 |
+| 2026-10-31 | ecmwf_ifs025 | 0.2 | 9 | 6.3 | 15.8 |
+| 2026-10-25 | ncep_gfs_global | 0.0 | 3 | 14.3 | 24.0 |
 | 2026-10-26 | ncep_gfs_global | 0.0 | 0 | 15.2 | 18.6 |
 | 2026-10-27 | ncep_gfs_global | 0.0 | 0 | 7.0 | 15.9 |
 | 2026-10-28 | ncep_gfs_global | 0.0 | 0 | 5.9 | 13.0 |
-| 2026-10-29 | ncep_gfs_global | 1.6 | 42 | 9.3 | 12.9 |
-| 2026-10-30 | ncep_gfs_global | 10.8 | 53 | 9.9 | 18.3 |
+| 2026-10-29 | ncep_gfs_global | 1.6 | 43 | 9.3 | 12.9 |
+| 2026-10-30 | ncep_gfs_global | 10.8 | 58 | 9.9 | 18.3 |
 | 2026-10-31 | ncep_gfs_global | 0.0 | 3 | 4.6 | 11.8 |
 | 2026-10-25 | icon_global | 0.0 | 0 | 12.0 | 22.9 |
 | 2026-10-26 | icon_global | 0.0 | 0 | 15.5 | 21.2 |
@@ -42,10 +42,10 @@
 
 ## 모델별 원자료 출처
 
-- ecmwf_ifs025: https://api.open-meteo.com/v1/forecast?latitude=37.55&longitude=126.875&timezone=Asia%2FSeoul&forecast_days=7&models=ecmwf_ifs025&hourly=precipitation%2Cprecipitation_probability%2Ctemperature_2m&daily=precipitation_sum%2Cprecipitation_probability_max%2Ctemperature_2m_min%2Ctemperature_2m_max (수집 2026-10-25T21:27:50+09:00)
-- ncep_gfs_global: https://api.open-meteo.com/v1/forecast?latitude=37.55&longitude=126.875&timezone=Asia%2FSeoul&forecast_days=7&models=ncep_gfs_global&hourly=precipitation%2Cprecipitation_probability%2Ctemperature_2m&daily=precipitation_sum%2Cprecipitation_probability_max%2Ctemperature_2m_min%2Ctemperature_2m_max (수집 2026-10-25T21:27:50+09:00)
-- icon_global: https://api.open-meteo.com/v1/forecast?latitude=37.55&longitude=126.875&timezone=Asia%2FSeoul&forecast_days=7&models=icon_global&hourly=precipitation%2Cprecipitation_probability%2Ctemperature_2m&daily=precipitation_sum%2Cprecipitation_probability_max%2Ctemperature_2m_min%2Ctemperature_2m_max (수집 2026-10-25T21:27:51+09:00)
-- gem_global: https://api.open-meteo.com/v1/forecast?latitude=37.55&longitude=126.875&timezone=Asia%2FSeoul&forecast_days=7&models=gem_global&hourly=precipitation%2Cprecipitation_probability%2Ctemperature_2m&daily=precipitation_sum%2Cprecipitation_probability_max%2Ctemperature_2m_min%2Ctemperature_2m_max (수집 2026-10-25T21:28:27+09:00)
+- ecmwf_ifs025: https://api.open-meteo.com/v1/forecast?latitude=37.55&longitude=126.875&timezone=Asia%2FSeoul&forecast_days=7&models=ecmwf_ifs025&hourly=precipitation%2Cprecipitation_probability%2Ctemperature_2m&daily=precipitation_sum%2Cprecipitation_probability_max%2Ctemperature_2m_min%2Ctemperature_2m_max (수집 2026-10-25T22:40:46+09:00)
+- ncep_gfs_global: https://api.open-meteo.com/v1/forecast?latitude=37.55&longitude=126.875&timezone=Asia%2FSeoul&forecast_days=7&models=ncep_gfs_global&hourly=precipitation%2Cprecipitation_probability%2Ctemperature_2m&daily=precipitation_sum%2Cprecipitation_probability_max%2Ctemperature_2m_min%2Ctemperature_2m_max (수집 2026-10-25T22:40:47+09:00)
+- icon_global: https://api.open-meteo.com/v1/forecast?latitude=37.55&longitude=126.875&timezone=Asia%2FSeoul&forecast_days=7&models=icon_global&hourly=precipitation%2Cprecipitation_probability%2Ctemperature_2m&daily=precipitation_sum%2Cprecipitation_probability_max%2Ctemperature_2m_min%2Ctemperature_2m_max (수집 2026-10-25T22:40:47+09:00)
+- gem_global: https://api.open-meteo.com/v1/forecast?latitude=37.55&longitude=126.875&timezone=Asia%2FSeoul&forecast_days=7&models=gem_global&hourly=precipitation%2Cprecipitation_probability%2Ctemperature_2m&daily=precipitation_sum%2Cprecipitation_probability_max%2Ctemperature_2m_min%2Ctemperature_2m_max (수집 2026-10-25T22:40:51+09:00)
 
 ## 응답 실패 모델
 
