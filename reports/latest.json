@@ -1,5 +1,5 @@
 {
-  "generated_at_kst": "2026-10-25T09:14:41+09:00",
+  "generated_at_kst": "2026-10-25T10:30:13+09:00",
   "location": {
     "name": "서울 마포구",
     "latitude": 37.55,
@@ -54,21 +54,21 @@
           {
             "date": "2026-10-29",
             "precipitation_mm": 0.5,
-            "precipitation_probability_max_pct": 75,
+            "precipitation_probability_max_pct": 69,
             "temperature_min_c": 4.8,
             "temperature_max_c": 12.6
           },
           {
             "date": "2026-10-30",
             "precipitation_mm": 0.5,
-            "precipitation_probability_max_pct": 78,
+            "precipitation_probability_max_pct": 69,
             "temperature_min_c": 4.6,
             "temperature_max_c": 18.5
           },
           {
             "date": "2026-10-31",
             "precipitation_mm": 0.0,
-            "precipitation_probability_max_pct": 15,
+            "precipitation_probability_max_pct": 4,
             "temperature_min_c": 2.5,
             "temperature_max_c": 13.7
           }
@@ -77,7 +77,7 @@
         "daily_peaks_ge_20mm": []
       },
       "source_url": "https://api.open-meteo.com/v1/forecast?latitude=37.55&longitude=126.875&timezone=Asia%2FSeoul&forecast_days=7&models=ecmwf_ifs025&hourly=precipitation%2Cprecipitation_probability%2Ctemperature_2m&daily=precipitation_sum%2Cprecipitation_probability_max%2Ctemperature_2m_min%2Ctemperature_2m_max",
-      "retrieved_at_kst": "2026-10-25T09:14:36+09:00",
+      "retrieved_at_kst": "2026-10-25T10:30:07+09:00",
       "api_model": null,
       "hourly_units": {
         "time": "iso8601",
@@ -150,7 +150,7 @@
         "daily_peaks_ge_20mm": []
       },
       "source_url": "https://api.open-meteo.com/v1/forecast?latitude=37.55&longitude=126.875&timezone=Asia%2FSeoul&forecast_days=7&models=ncep_gfs_global&hourly=precipitation%2Cprecipitation_probability%2Ctemperature_2m&daily=precipitation_sum%2Cprecipitation_probability_max%2Ctemperature_2m_min%2Ctemperature_2m_max",
-      "retrieved_at_kst": "2026-10-25T09:14:36+09:00",
+      "retrieved_at_kst": "2026-10-25T10:30:08+09:00",
       "api_model": null,
       "hourly_units": {
         "time": "iso8601",
@@ -223,7 +223,7 @@
         "daily_peaks_ge_20mm": []
       },
       "source_url": "https://api.open-meteo.com/v1/forecast?latitude=37.55&longitude=126.875&timezone=Asia%2FSeoul&forecast_days=7&models=icon_global&hourly=precipitation%2Cprecipitation_probability%2Ctemperature_2m&daily=precipitation_sum%2Cprecipitation_probability_max%2Ctemperature_2m_min%2Ctemperature_2m_max",
-      "retrieved_at_kst": "2026-10-25T09:14:37+09:00",
+      "retrieved_at_kst": "2026-10-25T10:30:08+09:00",
       "api_model": null,
       "hourly_units": {
         "time": "iso8601",
@@ -296,7 +296,7 @@
         "daily_peaks_ge_20mm": []
       },
       "source_url": "https://api.open-meteo.com/v1/forecast?latitude=37.55&longitude=126.875&timezone=Asia%2FSeoul&forecast_days=7&models=gem_global&hourly=precipitation%2Cprecipitation_probability%2Ctemperature_2m&daily=precipitation_sum%2Cprecipitation_probability_max%2Ctemperature_2m_min%2Ctemperature_2m_max",
-      "retrieved_at_kst": "2026-10-25T09:14:41+09:00",
+      "retrieved_at_kst": "2026-10-25T10:30:13+09:00",
       "api_model": null,
       "hourly_units": {
         "time": "iso8601",
