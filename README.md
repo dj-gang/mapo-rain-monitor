@@ -6,13 +6,14 @@
 
 | 예보원 | 출처 | 키 |
 |---|---|---|
-| ECMWF, ECMWF AIFS, GFS, ICON, GEM, 일본기상청(JMA), 영국기상청(UKMO), 한국기상청 GDPS | [Open-Meteo](https://open-meteo.com/en/docs) `models=` | 불필요 |
+| ECMWF, ECMWF AIFS, GFS, ICON, GEM, 일본기상청(JMA), 영국기상청(UKMO) | [Open-Meteo](https://open-meteo.com/en/docs) `models=` | 불필요 |
 | 한국기상청 단기예보 (약 3일) | [공공데이터포털 VilageFcstInfoService_2.0](https://www.data.go.kr/data/15084084/openapi.do) | `KMA_SERVICE_KEY` |
 
 - 판정: 예보원별 일강수량 ≥ 기준값이면 "N곳 중 M곳" 으로 집계합니다.
 - 한 예보원이 실패해도 나머지로 판정하고, 실패한 예보원은 메시지에 표시합니다.
 - 기상청 PCP의 범위 표기(`30.0~50.0mm`, `50.0mm 이상`)는 하한값, `1mm 미만`은 0.5mm로 합산합니다.
 - 애플날씨·아큐웨더는 유료 API라 포함하지 않았습니다.
+- Open-Meteo의 `kma_gdps`는 강수량이 전부 null로 와서 제외했습니다(2026-10-26 실행 기준). 한국기상청은 단기예보 API로 받습니다.
 
 ## 설정 (Settings → Secrets and variables → Actions)
 

@@ -43,7 +43,6 @@ OPEN_METEO_MODELS = [
     ("gem_global", "GEM", "GEM"),
     ("jma_gsm", "일본기상청", "JMA"),
     ("ukmo_global_deterministic_10km", "영국기상청", "UKMO"),
-    ("kma_gdps", "한국기상청 GDPS", "GDPS"),
 ]
 KMA_URL = "https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst"
 KMA_BASE_HOURS = (2, 5, 8, 11, 14, 17, 20, 23)
